@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Pet.Models.Roles>
+
+@{
+    ViewData["Title"] = "Roles Management";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row page-titles mx-0">
+    <div class="header-sub-title">
+        <ol class="breadcrumb">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <span class="breadcrumb-item">Role Of Accounts</span>
+        </ol>
+    </div>
+</div>
+<div>
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title">
+                <h4>Roles Management</h4>
+            </div>
+            <div class="row m-b-30">
+                <div class="col-lg-12 text-right">
+                    <a class="btn btn-primary" asp-area="Admin" asp-controller="AdminRoles" asp-action="Create"><i class="anticon anticon-plus-circle m-r-5"></i><span>Thêm quyền</span></a>
+                </div>
+                <div class="col-lg-4 text-right">
+
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Role Name</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <th>@item.RoleId</th>
+                                    <td>
+                                        <span class="label label-dark">@item.RoleName</span>
+                                    </td>
+                                    <td>@item.Description</td>
+                                    <td>
+                                        <span>
+                                            <a asp-area="Admin" asp-controller="AdminRoles" asp-action="Details" asp-route-id="@item.RoleId" title="View"><i class="fa fa-eye color-muted m-r-5"></i></a>
+                                            <a asp-area="Admin" asp-controller="AdminRoles" asp-action="Edit" asp-route-id="@item.RoleId" title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i></a>
+                                            <a asp-area="Admin" asp-controller="AdminRoles" asp-action="Delete" asp-route-id="@item.RoleId" title="Close"><i class="fa fa-close color-danger "></i></a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,141 @@
+﻿@model List<Pet.ModelViews.CartItem>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="cart-section mt-150 mb-150">
+    <div class="container">
+        <h1>Cart</h1>
+        <div class="row">
+            <div class="col-lg-8 col-md-12">
+                @if (Model != null && Model.Count() > 0)
+                {
+                    <div class="cart-table-wrap">
+                        <table class="cart-table">
+                            <thead class="cart-table-head">
+                                <tr class="table-head-row">
+                                    <th class="product-remove"></th>
+                                    <th class="product-image">Product Image</th>
+                                    <th class="product-name">Name</th>
+                                    <th class="product-price">Price</th>
+                                    <th class="product-quantity">Quantity</th>
+                                    <th class="product-total">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Count() > 0)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr class="table-body-row">
+                                            <td class="product_remove">
+                                                <input type="button" value="X" class="removecart btn btn-primary" data-mahh="@item.product.ProductId" />
+                                            </td>
+                                            <td class="product-image"><img src="~/images/products/@item.product.Thumb" alt=""></td>
+                                            <td class="product-name">@item.product.ProductName</td>
+                                            <td class="product-price">@item.product.Price.Value.ToString("#,##0") VNĐ</td>
+                                            <td class="product-quantity">
+                                                
+                                                    <input data-mahh="@item.product.ProductId" data-dongia="@item.product.Price" class="cartItem cart-plus-minus-box" value="@item.amount" min="1" type="number">
+                                                
+                                            </td>
+                                            <td class="product-total">@item.TotalMoney.ToString("#,##0") VNĐ</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                }
+                else
+                {
+                    <p>Not product in cart!!</p>
+                }
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <div class="total-section">
+                    <table class="total-table">
+                        <thead class="total-table-head">
+                            <tr class="table-total-row">
+                                <th>Total</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>                  
+                            <tr class="total-data">
+                                <td><strong>Total: </strong></td>
+                                <td>@Model.Sum(x => x.TotalMoney).ToString("#,##0") VND</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="cart-buttons">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a href="/checkout.html" class="boxed-btn black">Check Out</a>
+                        }
+                        else
+                        {
+                            <a href="/dang-nhap.html?returnUrl=/checkout.html" class="boxed-btn black">Check Out</a>
+                        }
+                    </div>
+                </div>
+
+                
+            </div>
+
+
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+    $(function () {
+        function loadHeaderCart() {
+            $('#miniCart').load("/AjaxContent/HeaderCart");
+            $('#numberCart').load("/AjaxContent/NumberCart");
+        }
+        $(".removecart").click(function () {
+            var productid = $(this).attr("data-mahh");
+            $.ajax({
+                url: "api/cart/remove",
+                type: "POST",
+                dataType: "JSON",
+                data: { productID: productid },
+                success: function (result) {
+                    if (result.success) {
+                        loadHeaderCart();//Reload lai gio hang
+                        location.reload();
+                    }
+                },
+                error: function (rs) {
+                    alert("Remove Cart Error !")
+                }
+            });
+        });
+        $(".cartItem").click(function () {
+            var productid = $(this).attr("data-mahh");
+            var soluong = parseInt($(this).val());
+            $.ajax({
+                url: "api/cart/update",
+                type: "POST",
+                dataType: "JSON",
+                data: {
+                    productID: productid,
+                    amount: soluong
+                },
+                success: function (result) {
+                    if (result.success) {
+                        loadHeaderCart();//Reload lai gio hang
+                        window.location = 'cart.html';
+                    }
+                },
+                error: function (rs) {
+                    alert("Cập nhật Cart Error !")
+                }
+            });
+        });
+    });
+    </script>
+}

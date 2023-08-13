@@ -1,0 +1,38 @@
+﻿@model List<Orders>
+@if (Model != null && Model.Count() > 0)
+{
+    <div class="card-body pb-2">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Purchase Date</th>
+                    <th scope="col">Delivery Date</th>
+                    <th scope="col">Order Status</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <th scope="row">@item.OrderId</th>
+                    <td>@item.OrderDate</td>
+                    <td>@item.Shipdate</td>
+                    <td>@item.Transaction.Status</td>
+                    <td>@item.TotalMoney.Value.ToString("#,##0") VNĐ</td>
+                    <td>
+                        <a href="javascript:void(0)" class="btn btn-secondary btn-primary" ><span>Xem đơn hàng</span></a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p>Not ordered!</p>
+}
+
+

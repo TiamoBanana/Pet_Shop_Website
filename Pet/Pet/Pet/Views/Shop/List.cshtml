@@ -1,0 +1,53 @@
+﻿@using PagedList.Core.Mvc
+@model PagedList.Core.IPagedList<Pet.Models.Products>
+@{
+    Categories category = ViewBag.CurrentCat;
+    ViewData["Title"] = category.Title +" "+ ViewBag.CurrentPage;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int PageCurrent = ViewBag.CurrentPage;
+    int PageNext = PageCurrent + 1;
+}
+<!-- products -->
+<div class="product-section mt-150 mb-150">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12 text-center mb-150">
+                
+                    <h1>@category.CartName</h1>
+                
+            </div>
+        </div>
+
+        <div class="row product-lists">
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    string url = $"/{item.Alias}-{item.ProductId}.html";
+                    <div class="col-lg-4 col-md-6 text-center strawberry">
+                        <div class="single-product-item">
+                            <div class="product-image">
+                                <a href="@url"><img src="~/images/products/@item.Thumb" alt=""></a>
+                            </div>
+                            <a href="@url"><h3>@item.ProductName</h3></a>
+                            <p class="product-price">@item.Price</p>
+                            <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="pagination-area pt-10">
+                    <ul class="pagination justify-content-center">
+                        <pager class="pager-container" list="@Model" options="@PagedListRenderOptions.Bootstrap4PageNumbersOnly" asp-area="" asp-controller="Shop" asp-route-Alias="@category.Alias" asp-action="List" />
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end products -->

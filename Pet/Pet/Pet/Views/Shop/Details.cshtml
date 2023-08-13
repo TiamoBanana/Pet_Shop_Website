@@ -1,0 +1,148 @@
+﻿@model Pet.Models.Products
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Products> lsProducts = ViewBag.SanPham;
+}
+
+
+
+
+<!-- single product -->
+<div class="single-product mt-150 mb-150">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="single-product-img">
+                    <img src="~/images/products/@Model.Thumb" alt="">
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="single-product-content">
+                    <h3>@Model.ProductName</h3>
+                    <p class="single-product-pricing">@Model.Price.Value.ToString("#,##0") VNĐ</p>
+                    <p>@Model.ShortDesc</p>
+                    <div class="single-product-form">
+                        <ul class="quantity-with-btn pb-7">
+                            <li class="quantity">
+                                <div class="cart-plus-minus">
+                                    <input id="txtsoLuong" name="txtsoLuong" class="cart-plus-minus-box" value="1" type="text">
+                                </div>
+                            </li>
+                            <li class="add-to-cart">
+                                <a class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                                <input hidden asp-for="ProductId" />
+                            </li>
+                        </ul>
+
+
+                        <p><strong>Categories: </strong><a href="/@Model.Cat.Alias">@Model.Cat.CartName</a></p>
+
+                    </div>
+                    <h4>Share:</h4>
+                    <ul class="product-share">
+                        <li><a href=""><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href=""><i class="fab fa-twitter"></i></a></li>
+                        <li><a href=""><i class="fab fa-google-plus-g"></i></a></li>
+                        <li><a href=""><i class="fab fa-linkedin"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end single product -->
+<!-- more products -->
+<div class="more-products mb-150">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center">
+                <div class="section-title">
+                    <h3><span class="orange-text">Related</span> Products</h3>
+                    <p>The product is highly appreciated and good quality.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @if (lsProducts != null)
+            {
+                foreach (var item in lsProducts)
+                {
+                    string url = $"/{item.Alias}-{item.ProductId}.html";
+                    <div class="col-lg-4 col-md-6 offset-lg-0 offset-md-3 text-center">
+                        <div class="single-product-item">
+                            <div class="product-image">
+                                <a href="url"><img src="~/images/products/@item.Thumb" alt=""></a>
+                            </div>
+                            <h3>@item.ProductName</h3>
+                            <p class="product-price">@item.Price.Value.ToString("#,##0") VND </p>
+                            <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+<!-- end more products -->
+
+@section Scripts{
+    <script>
+    $(document).ready(function () {
+        $(function () {
+            $(".add-to-cart").click(function () {
+                var productid = $('#ProductId').val();
+                var soLuong = $('#txtsoLuong').val();
+                $.ajax({
+                    url: '/api/cart/add',
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {
+                        productID: productid,
+                        amount: soLuong
+                    },
+                    success: function (response) {
+                        if (response.result == 'Redirect') {
+                            window.location = response.url;
+                        }
+                        else {
+                            loadHeaderCart(); //Add Product success
+                            location.reload();
+                            //alert("Thêm thành công");
+                        }
+                        console.log(response); // log to the console to see whether it worked
+                    },
+                    error: function (error) {
+                        alert("There was an error posting the data to the server: " + error.responseText);
+                    }
+                });
+            });
+
+            @*$(".removecart").click(function () {
+                var productid = $(this).attr("data-productid");
+                $.ajax({
+                    url: "api/cart/remove",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: { productID: productid },
+                    success: function (result) {
+                        if (result.success) {
+                            loadHeaderCart();//Reload lai gio hang
+                            location.reload();
+                        }
+                    },
+                    error: function (rs) {
+                        alert("Remove Cart Error !")
+                    }
+                });
+            });*@
+        });
+        function loadHeaderCart() {
+            $('#miniCart').load("/AjaxContent/HeaderCart");
+           $('#numberCart').load("/AjaxContent/NumberCart");
+        }
+    });
+    </script>
+
+}

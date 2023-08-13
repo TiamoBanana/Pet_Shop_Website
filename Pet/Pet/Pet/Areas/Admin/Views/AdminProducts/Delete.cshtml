@@ -1,0 +1,128 @@
+﻿@model Pet.Models.Products
+
+@{
+    ViewData["Title"] = "Product Information" + Model.ProductName;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row page-titles mx-0">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="AdminProducts" asp-action="Index">List Of PRoduct</a></li>
+            <span class="breadcrumb-item">Product Information : @Model.ProductName</span>
+        </ol>
+    </div>
+</div>
+<div>
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title">
+                <h4>Product Information</h4>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <td style="color:black">ID:</td>
+                            <td>@Model.ProductId</td>
+                        </tr>
+                        <tr>
+                            <td style="color:black">Product Name:</td>
+                            <td>@Model.ProductName</td>
+                        </tr>
+                        <tr>
+                            <td style="color:black">Short Desc:</td>
+                            <td>@Model.ShortDesc</td>
+                        </tr>
+                        <tr>
+                            <td style="color:black">Description:</td>
+                            <td>@Model.Description</td>
+                        </tr>
+                        <tr>
+                            <td style="color:black">Price:</td>
+                            <td>@Model.Price</td>
+                        </tr>
+                        <tr>
+                            <td style="color:black">Discount:</td>
+                            <td>@Model.Discount</td>
+                        </tr>
+                        <tr>
+                            <td style="color:black">Status:</td>
+                            <td>
+                                @if (Model.Active)
+                                {
+                                    <div class="switch m-r-10">
+                                        <input type="checkbox" id="switch-1" checked="" />
+                                        <label for="switch-1"></label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="switch m-r-10">
+                                        <input type="checkbox" id="switch-1" />
+                                        <label for="switch-1"></label>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color:black">Best Sellers:</td>
+                            <td>
+                                @if (Model.BestSellers)
+                                {
+                                    <div class="switch m-r-10">
+                                        <input type="checkbox" id="switch-1" checked="" />
+                                        <label for="switch-1"></label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="switch m-r-10">
+                                        <input type="checkbox" id="switch-1" />
+                                        <label for="switch-1"></label>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color:black">Category:</td>
+                            <td>@Model.Cat.CartName</td>
+                        </tr>
+                        <tr>
+                            <td style="color:black">Date Created:</td>
+                            <td>@Model.DateCreated</td>
+                        </tr>
+                        <tr>
+                            <td style="color:black">Date Modified:</td>
+                            <td>@Model.DateModified</td>
+                        </tr>
+                        <tr>
+                            <td style="color:black">Title:</td>
+                            <td>@Model.Title</td>
+                        </tr>
+                        <tr>
+                            <td style="color:black">Avatar:</td>
+                            <td>
+                                <img width="300" height="300" src="~/images//products/@Model.Thumb" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color:black">Delete Confirmation:</td>
+                            <td>
+                                <form asp-controller="AdminProducts" asp-action="Delete" asp-route-id="@Model.ProductId">
+                                    <input type="hidden" asp-for="ProductId" />
+                                    <input type="submit" value="Delete Confirmation" class="btn btn-danger" /> |
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
